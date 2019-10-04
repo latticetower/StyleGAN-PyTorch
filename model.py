@@ -343,7 +343,11 @@ class StyleBased_Generator(nn.Module):
         # for i in range(step + 1):
         #     size = 4 * 2 ** i # Due to the upsampling, size of noise will grow
         #     noise.append(torch.randn((batch_size, 1, size, size), device=torch.device('cuda:0')))
-        
+        if step == 0 and len(noise) == 0:
+            device = next(self.parameters()).device
+            size = 4
+            noise = [torch.randn((batch_size, 1, size, size), device=device)]
+            
         for i, conv in enumerate(self.convs):
             # Choose current latent_w
             if i in mix_steps:
